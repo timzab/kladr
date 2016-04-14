@@ -45,8 +45,8 @@ namespace Kladr_auto_fill
             richTextBox1.Text = "";
 
             ConnectionString = new OleDbConnection("Provider = Microsoft.ACE.OLEDB.12.0; Data Source =C:\\BASE_KLADR; Extended Properties=DBASE IV");
-            ConnectionString.Open();
-            status_Connection.Text = "Connected";
+           ConnectionString.Open();
+           status_Connection.Text = "Connected";
 
         }
 
@@ -70,6 +70,9 @@ namespace Kladr_auto_fill
             }
           }
 
+         
+
+        
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
             if (status_Connection.Text != "Connected")
@@ -77,8 +80,13 @@ namespace Kladr_auto_fill
               //  tb_REGION.Text = "";
                 MessageBox.Show("Соединитесь с БД!!!");                
                 return;
-            }        
-                    
+            }
+
+          //  if (tb_REGION.Text.Length == 1)
+          //  {
+          //      tb_REGION.Text.ToUpper();
+          //  }
+
             string SQL_String = "select * from kladr where kladr.name like '" + tb_REGION.Text + "%' and right(kladr.code,11)='00000000000'";
             OleDbCommand cmd = new OleDbCommand(SQL_String, ConnectionString);           
             adapter_OLEDB = new OleDbDataAdapter(cmd);
@@ -87,9 +95,9 @@ namespace Kladr_auto_fill
             dataGridView1.DataSource = ds.Tables[0];
             if (dataGridView1.RowCount==1)
             { 
-                MessageBox.Show("Некорректныей ввод данных");
-            tb_REGION.Text = "";
-            return;
+              MessageBox.Show("Некорректныей ввод данных");
+              tb_REGION.Text = "";
+              return;
             }
             richTextBox1.Text = " ";
             richTextBox1.AppendText(this.dataGridView1.CurrentRow.Cells[0].Value.ToString() + " ");
@@ -101,7 +109,13 @@ namespace Kladr_auto_fill
         private void tb_RAYON_TextChanged_1(object sender, EventArgs e)
         {
             string reg = tb_REGION_SKR.Text.Remove(2);
-            string SQL_String = "select * from kladr where kladr.code like '" + reg + "%' and SOCR='р-н' and kladr.name like '" + tb_RAYON.Text + "%'";
+          //  string check_rayon = tb_REGION_SKR.Text.Remove(5);
+          //  string take_3 = check_rayon.Substring(2, 3);
+
+          //  string SQL_String = "select * from kladr where kladr.code like '" + reg + "%' and SOCR='р-н' and kladr.name like '" + tb_RAYON.Text + "%'";
+           // string SQL_String = "select * from kladr where kladr.code like '" + reg + "%' and '" + take_3 + "'!='000' and kladr.name like '" + tb_RAYON.Text + "%'";
+            string SQL_String = "select * from kladr where kladr.code like '" + reg + "%' and kladr.code not like '" + reg + "000%' and right(kladr.code,8)='00000000' and kladr.status='0' and kladr.name like '" + tb_RAYON.Text + "%'";
+          
             OleDbCommand cmd = new OleDbCommand(SQL_String, ConnectionString);           
             adapter_OLEDB = new OleDbDataAdapter(cmd);
             ds = new DataSet();
@@ -174,6 +188,11 @@ namespace Kladr_auto_fill
             }
         }
 
+        private void tb_NASPUNKT_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+        
         private void tb_ULICA_TextChanged(object sender, EventArgs e)
         {
             string reg = tb_GOROD_SKR.Text.Remove(11);
@@ -205,9 +224,13 @@ namespace Kladr_auto_fill
             tb_ULICA_SKR.Text = this.dataGridView1.CurrentRow.Cells[2].Value.ToString();
         }
 
-        private void textBox2_TextChanged(object sender, EventArgs e)
+       
+
+        private void tb_DOM_TextChanged(object sender, EventArgs e)
         {
 
         }
+
+       
     }
 }
