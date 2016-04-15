@@ -99,6 +99,7 @@ namespace Kladr_auto_fill
               tb_REGION.Text = "";
               return;
             }
+            lb_count_rows.Text = "Найдено " + (dataGridView1.RowCount - 1).ToString() + " строк(и)";
             richTextBox1.Text = " ";
             richTextBox1.AppendText(this.dataGridView1.CurrentRow.Cells[0].Value.ToString() + " ");
             richTextBox1.AppendText(this.dataGridView1.CurrentRow.Cells[1].Value.ToString());
@@ -126,7 +127,8 @@ namespace Kladr_auto_fill
                 MessageBox.Show("Некорректныей ввод данных");
                 tb_RAYON.Text = "";
                 return;
-            }       
+            }
+            lb_count_rows.Text = "Найдено " + (dataGridView1.RowCount - 1).ToString() + " строк(и)";
             richTextBox1.Text = "";
             richTextBox1.AppendText(region +", " + this.dataGridView1.CurrentRow.Cells[0].Value.ToString() + " ");
             richTextBox1.AppendText(this.dataGridView1.CurrentRow.Cells[1].Value.ToString());
@@ -142,20 +144,22 @@ namespace Kladr_auto_fill
                 
                // string SQL_String = "select * from kladr where kladr.code like '" + reg + "000%' and kladr.name like '" + tb_GOROD.Text + "%'";
               
-                string SQL_String = "select * from kladr where (kladr.code like '" + reg + "000%' or (kladr.code like '" + reg + "%' and kladr.status='1')) and kladr.name like '" + tb_GOROD.Text + "%'";
-               
+                string SQL_String = "select * from kladr where (kladr.code like '" + reg +
+                "000%' or (kladr.code like '" + reg + "%' and kladr.status='1')) and kladr.code not like '" + tb_REGION_SKR.Text 
+                + "' and kladr.name like '" + tb_GOROD.Text + "%' and right(kladr.code,5)='00000'";              
                 
                 OleDbCommand cmd = new OleDbCommand(SQL_String, ConnectionString);
                 adapter_OLEDB = new OleDbDataAdapter(cmd);
                 ds = new DataSet();
                 adapter_OLEDB.Fill(ds);
-                dataGridView1.DataSource = ds.Tables[0];
+                dataGridView1.DataSource = ds.Tables[0];                
                 if (dataGridView1.RowCount == 1)
                 {
                     MessageBox.Show("Некорректныей ввод данных");
                     tb_GOROD.Text = "";
                     return;
                 }
+                lb_count_rows.Text = "Найдено " + (dataGridView1.RowCount - 1).ToString() + " строк(и)";
                 richTextBox1.Text = "";
                 richTextBox1.AppendText(region+", " + ", " + this.dataGridView1.CurrentRow.Cells[0].Value.ToString() + " ");
                 richTextBox1.AppendText(this.dataGridView1.CurrentRow.Cells[1].Value.ToString());
@@ -167,19 +171,22 @@ namespace Kladr_auto_fill
                 string reg = tb_RAYON_SKR.Text.Remove(5);
 
               //  string SQL_String = "select * from kladr where (kladr.code like '" + reg + "000%' or (kladr.code like '" + reg +"%' and kladr.status='1')) and kladr.name like '" + tb_GOROD.Text + "%'";
-                string SQL_String = "select * from kladr where kladr.code like '" + reg + "000%' and kladr.name like '" + tb_GOROD.Text + "%'";
+                string SQL_String = "select * from kladr where kladr.code like '" + reg +
+                "%' and kladr.status='0' and kladr.code not like '" + tb_RAYON_SKR.Text + "'  and kladr.name like '" +
+                tb_GOROD.Text + "%' and right(kladr.code,5)='00000'";
 
                 OleDbCommand cmd = new OleDbCommand(SQL_String, ConnectionString);
                 adapter_OLEDB = new OleDbDataAdapter(cmd);
                 ds = new DataSet();
                 adapter_OLEDB.Fill(ds);
-                dataGridView1.DataSource = ds.Tables[0];
+                dataGridView1.DataSource = ds.Tables[0];                
                 if (dataGridView1.RowCount == 1)
                 {
                     MessageBox.Show("Некорректныей ввод данных");
                     tb_GOROD.Text = "";
                     return;
                 }
+                lb_count_rows.Text = "Найдено " + (dataGridView1.RowCount - 1).ToString() + " строк(и)";
                 richTextBox1.Text = "";
                 richTextBox1.AppendText(rayon + ", " + this.dataGridView1.CurrentRow.Cells[0].Value.ToString() + " ");
                 richTextBox1.AppendText(this.dataGridView1.CurrentRow.Cells[1].Value.ToString());
@@ -217,6 +224,7 @@ namespace Kladr_auto_fill
                 tb_GOROD.Text = "";
                 return;
             }
+            lb_count_rows.Text = "Найдено " + (dataGridView1.RowCount - 1).ToString() + " строк(и)";
             richTextBox1.Text = "";
             richTextBox1.AppendText(gorod + ", " + this.dataGridView1.CurrentRow.Cells[0].Value.ToString() + " ");
             richTextBox1.AppendText(this.dataGridView1.CurrentRow.Cells[1].Value.ToString());
