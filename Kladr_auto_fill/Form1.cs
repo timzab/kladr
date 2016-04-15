@@ -24,6 +24,7 @@ namespace Kladr_auto_fill
         string region;
         string rayon;
         string gorod;
+        string nas_punkt;
         string ulica;
         string dom;
         public Form1()
@@ -37,21 +38,22 @@ namespace Kladr_auto_fill
             tb_REGION.Text = "";
             tb_RAYON.Text = "";
             tb_GOROD.Text = "";
+            tb_NASPUNKT.Text = "";
             tb_ULICA.Text = "";
             tb_REGION_SKR.Text = "";
             tb_RAYON_SKR.Text = "";
             tb_GOROD_SKR.Text = "";
-          //  tb_ULICA_SKR.Text = "";
+            tb_NASPUNKT_SKR.Text = "";
+            tb_ULICA_SKR.Text = "";
             richTextBox1.Text = "";
 
             ConnectionString = new OleDbConnection("Provider = Microsoft.ACE.OLEDB.12.0; Data Source =C:\\BASE_KLADR; Extended Properties=DBASE IV");
-           ConnectionString.Open();
-           status_Connection.Text = "Connected";
-
+            ConnectionString.Open();
+            status_Connection.Text = "Connected";
         }
 
           private void btn_DISCONNECT_Click(object sender, EventArgs e)
-        {
+         {
             if (status_Connection.Text == "БД отключена")
             {
                 MessageBox.Show("Не от чего отсоединяться!!!");
@@ -68,11 +70,8 @@ namespace Kladr_auto_fill
             {
                 MessageBox.Show("Ошибка отсоединения БД: " + ex.Message);
             }
-          }
-
-         
-
-        
+          }      
+//*****************************Region             
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
             if (status_Connection.Text != "Connected")
@@ -80,12 +79,7 @@ namespace Kladr_auto_fill
               //  tb_REGION.Text = "";
                 MessageBox.Show("Соединитесь с БД!!!");                
                 return;
-            }
-
-          //  if (tb_REGION.Text.Length == 1)
-          //  {
-          //      tb_REGION.Text.ToUpper();
-          //  }
+            }        
 
             string SQL_String = "select * from kladr where kladr.name like '" + tb_REGION.Text + "%' and right(kladr.code,11)='00000000000'";
             OleDbCommand cmd = new OleDbCommand(SQL_String, ConnectionString);           
@@ -106,7 +100,7 @@ namespace Kladr_auto_fill
             region = richTextBox1.Text;
             tb_REGION_SKR.Text = this.dataGridView1.CurrentRow.Cells[2].Value.ToString();
         }          
-
+//******************************Rayon
         private void tb_RAYON_TextChanged_1(object sender, EventArgs e)
         {
             string reg = tb_REGION_SKR.Text.Remove(2);
@@ -135,7 +129,7 @@ namespace Kladr_auto_fill
             rayon = richTextBox1.Text;
             tb_RAYON_SKR.Text = this.dataGridView1.CurrentRow.Cells[2].Value.ToString();
         }
-
+//*****************************Gorod
         private void tb_GOROD_TextChanged(object sender, EventArgs e)
         {
             if (tb_RAYON.Text == "")
@@ -194,42 +188,133 @@ namespace Kladr_auto_fill
                 tb_GOROD_SKR.Text = this.dataGridView1.CurrentRow.Cells[2].Value.ToString();
             }
         }
-
+//***********************Nas Punkt
         private void tb_NASPUNKT_TextChanged(object sender, EventArgs e)
         {
+            if (tb_RAYON.Text == "" & tb_GOROD.Text == "")
+            {
+                string reg = tb_REGION_SKR.Text.Remove(2);
 
+                // string SQL_String = "select * from kladr where kladr.code like '" + reg + "000%' and kladr.name like '" + tb_GOROD.Text + "%'";
+
+                string SQL_String = "select * from kladr where kladr.code like '" + reg +
+                "000000%'  and kladr.code not like '" + tb_REGION_SKR.Text
+                + "' and kladr.name like '" + tb_NASPUNKT.Text + "%' and right(kladr.code,2)='00'";
+
+                OleDbCommand cmd = new OleDbCommand(SQL_String, ConnectionString);
+                adapter_OLEDB = new OleDbDataAdapter(cmd);
+                ds = new DataSet();
+                adapter_OLEDB.Fill(ds);
+                dataGridView1.DataSource = ds.Tables[0];
+                if (dataGridView1.RowCount == 1)
+                {
+                    MessageBox.Show("Некорректныей ввод данных");
+                    tb_NASPUNKT.Text = "";
+                    return;
+                }
+                lb_count_rows.Text = "Найдено " + (dataGridView1.RowCount - 1).ToString() + " строк(и)";
+                richTextBox1.Text = "";
+                richTextBox1.AppendText(region + ", " + ", " + ", " + this.dataGridView1.CurrentRow.Cells[0].Value.ToString() + " ");
+                richTextBox1.AppendText(this.dataGridView1.CurrentRow.Cells[1].Value.ToString());
+                nas_punkt = richTextBox1.Text;
+                tb_NASPUNKT_SKR.Text = this.dataGridView1.CurrentRow.Cells[2].Value.ToString();
+            }
+            else 
+            {
+                string reg = tb_GOROD_SKR.Text.Remove(8);
+
+                // string SQL_String = "select * from kladr where kladr.code like '" + reg + "000%' and kladr.name like '" + tb_GOROD.Text + "%'";
+
+                string SQL_String = "select * from kladr where kladr.code like '" + reg +
+                "%'  and kladr.code not like '" + tb_GOROD_SKR.Text + 
+                "%' and kladr.name like '" + tb_NASPUNKT.Text + "%' and right(kladr.code,2)='00'";
+
+                OleDbCommand cmd = new OleDbCommand(SQL_String, ConnectionString);
+                adapter_OLEDB = new OleDbDataAdapter(cmd);
+                ds = new DataSet();
+                adapter_OLEDB.Fill(ds);
+                dataGridView1.DataSource = ds.Tables[0];
+                if (dataGridView1.RowCount == 1)
+                {
+                    MessageBox.Show("Некорректныей ввод данных");
+                    tb_NASPUNKT.Text = "";
+                    return;
+                }
+                lb_count_rows.Text = "Найдено " + (dataGridView1.RowCount - 1).ToString() + " строк(и)";
+                richTextBox1.Text = "";
+                richTextBox1.AppendText(gorod + ", " + this.dataGridView1.CurrentRow.Cells[0].Value.ToString() + " ");
+                richTextBox1.AppendText(this.dataGridView1.CurrentRow.Cells[1].Value.ToString());
+                nas_punkt = richTextBox1.Text;
+                tb_NASPUNKT_SKR.Text = this.dataGridView1.CurrentRow.Cells[2].Value.ToString();
+            }
         }
-        
+//***************************Ulica        
         private void tb_ULICA_TextChanged(object sender, EventArgs e)
         {
-            string reg = tb_GOROD_SKR.Text.Remove(11);
-
-            // string SQL_String = "select * from kladr where kladr.code like '" + reg + "000%' and kladr.name like '" + tb_GOROD.Text + "%'";
-
-           // string SQL_String = "select * from kladr where (kladr.code like '" + reg + "000%' or (kladr.code like '" + reg + "%' and kladr.status='1')) and kladr.name like '" + tb_GOROD.Text + "%'";
-
-           // string SQL_String = "select s.name, s.socr, s.code from kladr k, street s  where left(k.code,11)=left(s.code,11) and k.code like '"+ reg + "%'  and s.name like '" + tb_ULICA.Text + "%'";
-
-            string SQL_String = "select s.name, s.socr, s.code from  street s where s.code like '" + reg + "%'  and s.name like '" + tb_ULICA.Text + "%'";
-
-
-            OleDbCommand cmd = new OleDbCommand(SQL_String, ConnectionString);
-            adapter_OLEDB = new OleDbDataAdapter(cmd);
-            ds = new DataSet();
-            adapter_OLEDB.Fill(ds);
-            dataGridView1.DataSource = ds.Tables[0];
-            if (dataGridView1.RowCount == 1)
+            if (tb_GOROD.Text == "")
             {
-                MessageBox.Show("Некорректныей ввод данных");
-                tb_GOROD.Text = "";
-                return;
+                string reg = tb_NASPUNKT_SKR.Text.Remove(11);
+
+                // string SQL_String = "select * from kladr where kladr.code like '" + reg + "000%' and kladr.name like '" + tb_GOROD.Text + "%'";
+
+                // string SQL_String = "select * from kladr where (kladr.code like '" + reg + "000%' or (kladr.code like '" + reg + "%' and kladr.status='1')) and kladr.name like '" + tb_GOROD.Text + "%'";
+
+                // string SQL_String = "select s.name, s.socr, s.code from kladr k, street s  where left(k.code,11)=left(s.code,11) and k.code like '"+ reg + "%'  and s.name like '" + tb_ULICA.Text + "%'";
+
+                string SQL_String = "select s.name, s.socr, s.code from  street s where s.code like '" + reg + "%'  and s.name like '" + tb_ULICA.Text + "%'";
+                // string SQL_String = "select s.name, s.socr, s.code from  street s where s.code like '77000002004%'  and s.name like 'Лесная%'";
+
+
+                OleDbCommand cmd = new OleDbCommand(SQL_String, ConnectionString);
+                adapter_OLEDB = new OleDbDataAdapter(cmd);
+                ds = new DataSet();
+                adapter_OLEDB.Fill(ds);
+                dataGridView1.DataSource = ds.Tables[0];
+                if (dataGridView1.RowCount == 1)
+                {
+                    MessageBox.Show("Некорректныей ввод данных");
+                    tb_ULICA.Text = "";
+                    return;
+                }
+                lb_count_rows.Text = "Найдено " + (dataGridView1.RowCount - 1).ToString() + " строк(и)";
+                richTextBox1.Text = "";
+                richTextBox1.AppendText(region + ", " + ", " + ", " + this.dataGridView1.CurrentRow.Cells[0].Value.ToString() + " ");
+                richTextBox1.AppendText(this.dataGridView1.CurrentRow.Cells[1].Value.ToString());
+                ulica = richTextBox1.Text;
+                tb_ULICA_SKR.Text = this.dataGridView1.CurrentRow.Cells[2].Value.ToString();
             }
-            lb_count_rows.Text = "Найдено " + (dataGridView1.RowCount - 1).ToString() + " строк(и)";
-            richTextBox1.Text = "";
-            richTextBox1.AppendText(gorod + ", " + this.dataGridView1.CurrentRow.Cells[0].Value.ToString() + " ");
-            richTextBox1.AppendText(this.dataGridView1.CurrentRow.Cells[1].Value.ToString());
-            ulica = richTextBox1.Text;
-            tb_ULICA_SKR.Text = this.dataGridView1.CurrentRow.Cells[2].Value.ToString();
+            else if (tb_NASPUNKT.Text == "")
+            {
+                string reg = tb_GOROD_SKR.Text.Remove(11);
+
+                // string SQL_String = "select * from kladr where kladr.code like '" + reg + "000%' and kladr.name like '" + tb_GOROD.Text + "%'";
+
+                // string SQL_String = "select * from kladr where (kladr.code like '" + reg + "000%' or (kladr.code like '" + reg + "%' and kladr.status='1')) and kladr.name like '" + tb_GOROD.Text + "%'";
+
+                // string SQL_String = "select s.name, s.socr, s.code from kladr k, street s  where left(k.code,11)=left(s.code,11) and k.code like '"+ reg + "%'  and s.name like '" + tb_ULICA.Text + "%'";
+
+                string SQL_String = "select s.name, s.socr, s.code from  street s where s.code like '" + reg + "%'  and s.name like '" + tb_ULICA.Text + "%'";
+                // string SQL_String = "select s.name, s.socr, s.code from  street s where s.code like '77000002004%'  and s.name like 'Лесная%'";
+
+
+                OleDbCommand cmd = new OleDbCommand(SQL_String, ConnectionString);
+                adapter_OLEDB = new OleDbDataAdapter(cmd);
+                ds = new DataSet();
+                adapter_OLEDB.Fill(ds);
+                dataGridView1.DataSource = ds.Tables[0];
+                if (dataGridView1.RowCount == 1)
+                {
+                    MessageBox.Show("Некорректныей ввод данных");
+                    tb_ULICA.Text = "";
+                    return;
+                }
+                lb_count_rows.Text = "Найдено " + (dataGridView1.RowCount - 1).ToString() + " строк(и)";
+                richTextBox1.Text = "";
+                richTextBox1.AppendText(gorod + ", " + ", " + this.dataGridView1.CurrentRow.Cells[0].Value.ToString() + " ");
+                richTextBox1.AppendText(this.dataGridView1.CurrentRow.Cells[1].Value.ToString());
+                ulica = richTextBox1.Text;
+                tb_ULICA_SKR.Text = this.dataGridView1.CurrentRow.Cells[2].Value.ToString();
+            }
         }
 
        
