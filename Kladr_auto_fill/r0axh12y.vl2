@@ -1,4 +1,4 @@
-﻿namespace Simple_KLADR
+﻿namespace Kladr_auto_fill
 {
     partial class Form1
     {
@@ -28,12 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.tb_REGION = new System.Windows.Forms.TextBox();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.status_Connection = new System.Windows.Forms.Label();
-            this.btn_Connect = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.tb_RAYON = new System.Windows.Forms.TextBox();
             this.lb_REGION = new System.Windows.Forms.Label();
@@ -42,7 +40,7 @@
             this.tb_GOROD = new System.Windows.Forms.TextBox();
             this.tb_ULICA = new System.Windows.Forms.TextBox();
             this.lb_ULICA = new System.Windows.Forms.Label();
-            this.btn_Disconnect = new System.Windows.Forms.Button();
+            this.btn_DISCONNECT = new System.Windows.Forms.Button();
             this.tb_REGION_SKR = new System.Windows.Forms.TextBox();
             this.tb_RAYON_SKR = new System.Windows.Forms.TextBox();
             this.tb_GOROD_SKR = new System.Windows.Forms.TextBox();
@@ -60,31 +58,16 @@
             this.lb_INDEX_R = new System.Windows.Forms.Label();
             this.lb_GNI_R = new System.Windows.Forms.Label();
             this.lb_OCATD_R = new System.Windows.Forms.Label();
-            this.tb_REGION_SOCR = new System.Windows.Forms.TextBox();
-            this.tb_RAYON_SOCR = new System.Windows.Forms.TextBox();
-            this.tb_GOROD_SOCR = new System.Windows.Forms.TextBox();
-            this.tb_NASPUNKT_SOCR = new System.Windows.Forms.TextBox();
-            this.tb_ULICA_SOCR = new System.Windows.Forms.TextBox();
-            this.tb_DOM_SOCR = new System.Windows.Forms.TextBox();
-            this.tb_db_Location = new System.Windows.Forms.TextBox();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.выходToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.оПрограммеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.оПрограммуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.лицензияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tb_REGION
             // 
             this.tb_REGION.Location = new System.Drawing.Point(122, 31);
             this.tb_REGION.Name = "tb_REGION";
-            this.tb_REGION.Size = new System.Drawing.Size(200, 20);
+            this.tb_REGION.Size = new System.Drawing.Size(236, 20);
             this.tb_REGION.TabIndex = 0;
-            this.tb_REGION.Click += new System.EventHandler(this.tb_REGION_Click);
+            this.tb_REGION.DoubleClick += new System.EventHandler(this.tb_REGION_Load);
             // 
             // richTextBox1
             // 
@@ -103,15 +86,15 @@
             this.status_Connection.TabIndex = 2;
             this.status_Connection.Text = "БД отключена";
             // 
-            // btn_Connect
+            // button1
             // 
-            this.btn_Connect.Location = new System.Drawing.Point(615, 58);
-            this.btn_Connect.Name = "btn_Connect";
-            this.btn_Connect.Size = new System.Drawing.Size(75, 23);
-            this.btn_Connect.TabIndex = 3;
-            this.btn_Connect.Text = "Connect";
-            this.btn_Connect.UseVisualStyleBackColor = true;
-            this.btn_Connect.Click += new System.EventHandler(this.btn_Connect_Click);
+            this.button1.Location = new System.Drawing.Point(400, 32);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 3;
+            this.button1.Text = "Connect";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // dataGridView1
             // 
@@ -126,9 +109,9 @@
             // 
             this.tb_RAYON.Location = new System.Drawing.Point(122, 57);
             this.tb_RAYON.Name = "tb_RAYON";
-            this.tb_RAYON.Size = new System.Drawing.Size(200, 20);
+            this.tb_RAYON.Size = new System.Drawing.Size(236, 20);
             this.tb_RAYON.TabIndex = 5;
-            this.tb_RAYON.Click += new System.EventHandler(this.tb_RAYON_Click);
+            this.tb_RAYON.TextChanged += new System.EventHandler(this.tb_RAYON_DoubleClick);
             // 
             // lb_REGION
             // 
@@ -161,17 +144,17 @@
             // 
             this.tb_GOROD.Location = new System.Drawing.Point(122, 83);
             this.tb_GOROD.Name = "tb_GOROD";
-            this.tb_GOROD.Size = new System.Drawing.Size(200, 20);
+            this.tb_GOROD.Size = new System.Drawing.Size(236, 20);
             this.tb_GOROD.TabIndex = 9;
-            this.tb_GOROD.Click += new System.EventHandler(this.tb_GOROD_Click);
+            this.tb_GOROD.TextChanged += new System.EventHandler(this.tb_GOROD_TextChanged);
             // 
             // tb_ULICA
             // 
             this.tb_ULICA.Location = new System.Drawing.Point(122, 136);
             this.tb_ULICA.Name = "tb_ULICA";
-            this.tb_ULICA.Size = new System.Drawing.Size(200, 20);
+            this.tb_ULICA.Size = new System.Drawing.Size(236, 20);
             this.tb_ULICA.TabIndex = 10;
-            this.tb_ULICA.Click += new System.EventHandler(this.tb_ULICA_Click);
+            this.tb_ULICA.TextChanged += new System.EventHandler(this.tb_ULICA_TextChanged);
             // 
             // lb_ULICA
             // 
@@ -182,41 +165,41 @@
             this.lb_ULICA.TabIndex = 11;
             this.lb_ULICA.Text = "Улица";
             // 
-            // btn_Disconnect
+            // btn_DISCONNECT
             // 
-            this.btn_Disconnect.Location = new System.Drawing.Point(615, 86);
-            this.btn_Disconnect.Name = "btn_Disconnect";
-            this.btn_Disconnect.Size = new System.Drawing.Size(75, 23);
-            this.btn_Disconnect.TabIndex = 12;
-            this.btn_Disconnect.Text = "Disconnect";
-            this.btn_Disconnect.UseVisualStyleBackColor = true;
-            this.btn_Disconnect.Click += new System.EventHandler(this.btn_Disconnect_Click);
+            this.btn_DISCONNECT.Location = new System.Drawing.Point(400, 64);
+            this.btn_DISCONNECT.Name = "btn_DISCONNECT";
+            this.btn_DISCONNECT.Size = new System.Drawing.Size(75, 23);
+            this.btn_DISCONNECT.TabIndex = 12;
+            this.btn_DISCONNECT.Text = "Disconnect";
+            this.btn_DISCONNECT.UseVisualStyleBackColor = true;
+            this.btn_DISCONNECT.Click += new System.EventHandler(this.btn_DISCONNECT_Click);
             // 
             // tb_REGION_SKR
             // 
             this.tb_REGION_SKR.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.tb_REGION_SKR.Location = new System.Drawing.Point(366, 31);
+            this.tb_REGION_SKR.Location = new System.Drawing.Point(547, 34);
             this.tb_REGION_SKR.Name = "tb_REGION_SKR";
             this.tb_REGION_SKR.Size = new System.Drawing.Size(227, 20);
             this.tb_REGION_SKR.TabIndex = 15;
             // 
             // tb_RAYON_SKR
             // 
-            this.tb_RAYON_SKR.Location = new System.Drawing.Point(366, 57);
+            this.tb_RAYON_SKR.Location = new System.Drawing.Point(547, 60);
             this.tb_RAYON_SKR.Name = "tb_RAYON_SKR";
             this.tb_RAYON_SKR.Size = new System.Drawing.Size(227, 20);
             this.tb_RAYON_SKR.TabIndex = 16;
             // 
             // tb_GOROD_SKR
             // 
-            this.tb_GOROD_SKR.Location = new System.Drawing.Point(366, 83);
+            this.tb_GOROD_SKR.Location = new System.Drawing.Point(547, 86);
             this.tb_GOROD_SKR.Name = "tb_GOROD_SKR";
             this.tb_GOROD_SKR.Size = new System.Drawing.Size(227, 20);
             this.tb_GOROD_SKR.TabIndex = 17;
             // 
             // tb_ULICA_SKR
             // 
-            this.tb_ULICA_SKR.Location = new System.Drawing.Point(366, 135);
+            this.tb_ULICA_SKR.Location = new System.Drawing.Point(547, 136);
             this.tb_ULICA_SKR.Name = "tb_ULICA_SKR";
             this.tb_ULICA_SKR.Size = new System.Drawing.Size(227, 20);
             this.tb_ULICA_SKR.TabIndex = 18;
@@ -225,14 +208,14 @@
             // 
             this.tb_DOM.Location = new System.Drawing.Point(122, 162);
             this.tb_DOM.Name = "tb_DOM";
-            this.tb_DOM.Size = new System.Drawing.Size(200, 20);
+            this.tb_DOM.Size = new System.Drawing.Size(236, 20);
             this.tb_DOM.TabIndex = 19;
-            this.tb_DOM.Click += new System.EventHandler(this.tb_DOM_Click);
+            this.tb_DOM.TextChanged += new System.EventHandler(this.tb_DOM_TextChanged);
             // 
             // lb_DOM
             // 
             this.lb_DOM.AutoSize = true;
-            this.lb_DOM.Location = new System.Drawing.Point(12, 165);
+            this.lb_DOM.Location = new System.Drawing.Point(12, 169);
             this.lb_DOM.Name = "lb_DOM";
             this.lb_DOM.Size = new System.Drawing.Size(30, 13);
             this.lb_DOM.TabIndex = 20;
@@ -240,7 +223,7 @@
             // 
             // tb_DOM_SKR
             // 
-            this.tb_DOM_SKR.Location = new System.Drawing.Point(366, 161);
+            this.tb_DOM_SKR.Location = new System.Drawing.Point(547, 162);
             this.tb_DOM_SKR.Name = "tb_DOM_SKR";
             this.tb_DOM_SKR.Size = new System.Drawing.Size(227, 20);
             this.tb_DOM_SKR.TabIndex = 21;
@@ -249,9 +232,9 @@
             // 
             this.tb_NASPUNKT.Location = new System.Drawing.Point(122, 110);
             this.tb_NASPUNKT.Name = "tb_NASPUNKT";
-            this.tb_NASPUNKT.Size = new System.Drawing.Size(200, 20);
+            this.tb_NASPUNKT.Size = new System.Drawing.Size(236, 20);
             this.tb_NASPUNKT.TabIndex = 22;
-            this.tb_NASPUNKT.Click += new System.EventHandler(this.tb_NASPUNKT_Click);
+            this.tb_NASPUNKT.TextChanged += new System.EventHandler(this.tb_NASPUNKT_TextChanged);
             // 
             // lb_NASPUNKT
             // 
@@ -264,7 +247,7 @@
             // 
             // tb_NASPUNKT_SKR
             // 
-            this.tb_NASPUNKT_SKR.Location = new System.Drawing.Point(366, 109);
+            this.tb_NASPUNKT_SKR.Location = new System.Drawing.Point(547, 110);
             this.tb_NASPUNKT_SKR.Name = "tb_NASPUNKT_SKR";
             this.tb_NASPUNKT_SKR.Size = new System.Drawing.Size(227, 20);
             this.tb_NASPUNKT_SKR.TabIndex = 24;
@@ -301,9 +284,9 @@
             this.lb_OKATD.AutoSize = true;
             this.lb_OKATD.Location = new System.Drawing.Point(339, 194);
             this.lb_OKATD.Name = "lb_OKATD";
-            this.lb_OKATD.Size = new System.Drawing.Size(44, 13);
+            this.lb_OKATD.Size = new System.Drawing.Size(45, 13);
             this.lb_OKATD.TabIndex = 28;
-            this.lb_OKATD.Text = "ОКАТО";
+            this.lb_OKATD.Text = "ОКАТД";
             // 
             // lb_INDEX_R
             // 
@@ -332,118 +315,11 @@
             this.lb_OCATD_R.TabIndex = 31;
             this.lb_OCATD_R.Text = "00000000000";
             // 
-            // tb_REGION_SOCR
-            // 
-            this.tb_REGION_SOCR.Location = new System.Drawing.Point(328, 31);
-            this.tb_REGION_SOCR.Name = "tb_REGION_SOCR";
-            this.tb_REGION_SOCR.Size = new System.Drawing.Size(32, 20);
-            this.tb_REGION_SOCR.TabIndex = 32;
-            // 
-            // tb_RAYON_SOCR
-            // 
-            this.tb_RAYON_SOCR.Location = new System.Drawing.Point(328, 57);
-            this.tb_RAYON_SOCR.Name = "tb_RAYON_SOCR";
-            this.tb_RAYON_SOCR.Size = new System.Drawing.Size(32, 20);
-            this.tb_RAYON_SOCR.TabIndex = 33;
-            // 
-            // tb_GOROD_SOCR
-            // 
-            this.tb_GOROD_SOCR.Location = new System.Drawing.Point(328, 83);
-            this.tb_GOROD_SOCR.Name = "tb_GOROD_SOCR";
-            this.tb_GOROD_SOCR.Size = new System.Drawing.Size(32, 20);
-            this.tb_GOROD_SOCR.TabIndex = 34;
-            // 
-            // tb_NASPUNKT_SOCR
-            // 
-            this.tb_NASPUNKT_SOCR.Location = new System.Drawing.Point(328, 110);
-            this.tb_NASPUNKT_SOCR.Name = "tb_NASPUNKT_SOCR";
-            this.tb_NASPUNKT_SOCR.Size = new System.Drawing.Size(32, 20);
-            this.tb_NASPUNKT_SOCR.TabIndex = 35;
-            // 
-            // tb_ULICA_SOCR
-            // 
-            this.tb_ULICA_SOCR.Location = new System.Drawing.Point(328, 136);
-            this.tb_ULICA_SOCR.Name = "tb_ULICA_SOCR";
-            this.tb_ULICA_SOCR.Size = new System.Drawing.Size(32, 20);
-            this.tb_ULICA_SOCR.TabIndex = 36;
-            // 
-            // tb_DOM_SOCR
-            // 
-            this.tb_DOM_SOCR.Location = new System.Drawing.Point(328, 162);
-            this.tb_DOM_SOCR.Name = "tb_DOM_SOCR";
-            this.tb_DOM_SOCR.Size = new System.Drawing.Size(32, 20);
-            this.tb_DOM_SOCR.TabIndex = 37;
-            // 
-            // tb_db_Location
-            // 
-            this.tb_db_Location.Location = new System.Drawing.Point(615, 31);
-            this.tb_db_Location.Name = "tb_db_Location";
-            this.tb_db_Location.Size = new System.Drawing.Size(144, 20);
-            this.tb_db_Location.TabIndex = 38;
-            this.toolTip1.SetToolTip(this.tb_db_Location, "Кликните поле для выбора папки с  файлами БД КЛАДР");
-            this.tb_db_Location.Click += new System.EventHandler(this.tb_db_Location_Click);
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.файлToolStripMenuItem,
-            this.оПрограммеToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(786, 24);
-            this.menuStrip1.TabIndex = 39;
-            this.menuStrip1.Text = "menuStrip1";
-            // 
-            // файлToolStripMenuItem
-            // 
-            this.файлToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.выходToolStripMenuItem});
-            this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
-            this.файлToolStripMenuItem.Size = new System.Drawing.Size(45, 20);
-            this.файлToolStripMenuItem.Text = "Файл";
-            // 
-            // выходToolStripMenuItem
-            // 
-            this.выходToolStripMenuItem.Name = "выходToolStripMenuItem";
-            this.выходToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.выходToolStripMenuItem.Text = "Выход";
-            this.выходToolStripMenuItem.Click += new System.EventHandler(this.выходToolStripMenuItem_Click);
-            // 
-            // оПрограммеToolStripMenuItem
-            // 
-            this.оПрограммеToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.оПрограммуToolStripMenuItem,
-            this.лицензияToolStripMenuItem});
-            this.оПрограммеToolStripMenuItem.Name = "оПрограммеToolStripMenuItem";
-            this.оПрограммеToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
-            this.оПрограммеToolStripMenuItem.Text = "Помощь";
-            // 
-            // оПрограммуToolStripMenuItem
-            // 
-            this.оПрограммуToolStripMenuItem.Name = "оПрограммуToolStripMenuItem";
-            this.оПрограммуToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.оПрограммуToolStripMenuItem.Text = "О программe";
-            this.оПрограммуToolStripMenuItem.Click += new System.EventHandler(this.оПрограммуToolStripMenuItem_Click);
-            // 
-            // лицензияToolStripMenuItem
-            // 
-            this.лицензияToolStripMenuItem.Name = "лицензияToolStripMenuItem";
-            this.лицензияToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.лицензияToolStripMenuItem.Text = "Лицензия";
-            this.лицензияToolStripMenuItem.Click += new System.EventHandler(this.лицензияToolStripMenuItem_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(786, 630);
-            this.Controls.Add(this.tb_db_Location);
-            this.Controls.Add(this.tb_DOM_SOCR);
-            this.Controls.Add(this.tb_ULICA_SOCR);
-            this.Controls.Add(this.tb_NASPUNKT_SOCR);
-            this.Controls.Add(this.tb_GOROD_SOCR);
-            this.Controls.Add(this.tb_RAYON_SOCR);
-            this.Controls.Add(this.tb_REGION_SOCR);
             this.Controls.Add(this.lb_OCATD_R);
             this.Controls.Add(this.lb_GNI_R);
             this.Controls.Add(this.lb_INDEX_R);
@@ -461,7 +337,7 @@
             this.Controls.Add(this.tb_GOROD_SKR);
             this.Controls.Add(this.tb_RAYON_SKR);
             this.Controls.Add(this.tb_REGION_SKR);
-            this.Controls.Add(this.btn_Disconnect);
+            this.Controls.Add(this.btn_DISCONNECT);
             this.Controls.Add(this.lb_ULICA);
             this.Controls.Add(this.tb_ULICA);
             this.Controls.Add(this.tb_GOROD);
@@ -470,18 +346,13 @@
             this.Controls.Add(this.lb_REGION);
             this.Controls.Add(this.tb_RAYON);
             this.Controls.Add(this.dataGridView1);
-            this.Controls.Add(this.btn_Connect);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.status_Connection);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.tb_REGION);
-            this.Controls.Add(this.menuStrip1);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
-            this.Text = "Simple KLADR (Работа с БД Кладр)";
+            this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -492,7 +363,7 @@
         private System.Windows.Forms.TextBox tb_REGION;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Label status_Connection;
-        private System.Windows.Forms.Button btn_Connect;
+        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.TextBox tb_RAYON;
         private System.Windows.Forms.Label lb_REGION;
@@ -501,7 +372,7 @@
         private System.Windows.Forms.TextBox tb_GOROD;
         private System.Windows.Forms.TextBox tb_ULICA;
         private System.Windows.Forms.Label lb_ULICA;
-        private System.Windows.Forms.Button btn_Disconnect;
+        private System.Windows.Forms.Button btn_DISCONNECT;
         private System.Windows.Forms.TextBox tb_REGION_SKR;
         private System.Windows.Forms.TextBox tb_RAYON_SKR;
         private System.Windows.Forms.TextBox tb_GOROD_SKR;
@@ -519,20 +390,6 @@
         private System.Windows.Forms.Label lb_INDEX_R;
         protected internal System.Windows.Forms.Label lb_GNI_R;
         private System.Windows.Forms.Label lb_OCATD_R;
-        private System.Windows.Forms.TextBox tb_REGION_SOCR;
-        private System.Windows.Forms.TextBox tb_RAYON_SOCR;
-        private System.Windows.Forms.TextBox tb_GOROD_SOCR;
-        private System.Windows.Forms.TextBox tb_NASPUNKT_SOCR;
-        private System.Windows.Forms.TextBox tb_ULICA_SOCR;
-        private System.Windows.Forms.TextBox tb_DOM_SOCR;
-        private System.Windows.Forms.TextBox tb_db_Location;
-        private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem файлToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem выходToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem оПрограммеToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem оПрограммуToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem лицензияToolStripMenuItem;
-        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
 

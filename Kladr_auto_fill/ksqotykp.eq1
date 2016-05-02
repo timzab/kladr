@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.OleDb;
 
-namespace Simple_KLADR
+namespace Kladr_auto_fill
 {
     public partial class Form1 : Form
     {
-        FolderBrowserDialog fbd = new FolderBrowserDialog();
-        OleDbConnection ConnectionString;      
+        OleDbConnection ConnectionString = new OleDbConnection("Provider = Microsoft.ACE.OLEDB.12.0; Data Source =C:\\BASE_KLADR; Extended Properties=DBASE IV");
         DataSet ds;
-        OleDbDataAdapter adapter_OLEDB;     
-      
-        string index ="";
+        OleDbDataAdapter adapter_OLEDB;
+        FolderBrowserDialog fbd = new FolderBrowserDialog();
+        // OpenFileDialog ofd = new OpenFileDialog();
+
         string region = "";
         string reg = "";
         string rayon = "";
@@ -26,7 +26,7 @@ namespace Simple_KLADR
         string nas_punkt = "";
         string ulica = "";
         string dom = "";
-        int counter;
+        int index;
         string SQL_String;
 
         public Form1()
@@ -34,46 +34,21 @@ namespace Simple_KLADR
             InitializeComponent();
         }
 
-        private void btn_Connect_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-            if (tb_db_Location.Text == "") //проверка заполнения поля формы
+            clear_func();
+            dataGridView1.DataSource = null;
+
+            if (ConnectionString.State == ConnectionState.Open)
             {
-                tb_db_Location.Focus();
-                MessageBox.Show("Введите путь к папке с файлами БД!!!");
-                return;
-            }
-            try
-            {
-                ConnectionString = new OleDbConnection("Provider = Microsoft.ACE.OLEDB.12.0; Data Source =" + tb_db_Location.Text + "; Extended Properties=DBASE IV");
-
-                clear_func();
-                dataGridView1.DataSource = null;
-
-                if (ConnectionString.State == ConnectionState.Open)
-                {
-                    ConnectionString.Close();
-                }
-
-                ConnectionString.Open();
-
-
-                SQL_String = "select top 1 * from Kladr"; //Проверка, есть ли в папке  файл с Кладр?
-                connection_func();
                 ConnectionString.Close();
-                dataGridView1.DataSource = null;
-       
-                status_Connection.Text = "Connected"; //если есть - Connected, если нет переходим к обработке ошибки.
-                tb_db_Location.Enabled = false;
-                btn_Connect.Enabled = false;
-                btn_Disconnect.Enabled = true;
             }
-            catch (Exception ex) //блок отрображения ошибок, если есть
-            {
-                MessageBox.Show("Ошибка: " + ex.Message);
-            }
+
+            ConnectionString.Open();
+            status_Connection.Text = "Connected";
         }
 
-        private void btn_Disconnect_Click(object sender, EventArgs e)
+        private void btn_DISCONNECT_Click(object sender, EventArgs e)
         {
             if (status_Connection.Text == "БД отключена")
             {
@@ -84,12 +59,8 @@ namespace Simple_KLADR
             try
             {
                 clear_func();
-                tb_db_Location.Enabled = true; 
                 dataGridView1.DataSource = null;
                 ConnectionString.Close();
-                btn_Connect.Enabled = true;
-                btn_Disconnect.Enabled = false;
-                status_Connection.Text = "БД отключена!";
             }
 
             catch (Exception ex) //блок отрображения ошибок, если есть
@@ -119,7 +90,7 @@ namespace Simple_KLADR
             }
 
             lb_count_rows.Text = "Найдено " + (dataGridView1.RowCount - 1).ToString() + " строк(и)";
-            counter = 1;
+            index = 1;
         }
 
         //******************************Rayon
@@ -140,7 +111,7 @@ namespace Simple_KLADR
             }
 
             lb_count_rows.Text = "Найдено " + (dataGridView1.RowCount - 1).ToString() + " строк(и)";
-            counter = 2;
+            index = 2;
         }
 
         //*****************************Gorod
@@ -185,7 +156,7 @@ namespace Simple_KLADR
             }
 
             lb_count_rows.Text = "Найдено " + (dataGridView1.RowCount - 1).ToString() + " строк(и)";
-            counter = 3;
+            index = 3;
         }
 
         //***********************Nas Punkt
@@ -230,11 +201,10 @@ namespace Simple_KLADR
             {
                 tb_NASPUNKT.Enabled = false;
                 tb_NASPUNKT_SOCR.Enabled = false;
-                tb_NASPUNKT_SKR.Enabled = false;
             }
 
             lb_count_rows.Text = "Найдено " + (dataGridView1.RowCount - 1).ToString() + " строк(и)";
-            counter = 4;
+            index = 4;
         }
 
         //***************************Ulica        
@@ -254,10 +224,8 @@ namespace Simple_KLADR
                 {
                     tb_ULICA.Enabled = false;
                     tb_ULICA_SOCR.Enabled = false;
-                    tb_ULICA_SKR.Enabled = false;
                     tb_DOM.Enabled = false;
                     tb_DOM_SOCR.Enabled = false;
-                    tb_DOM_SKR.Enabled = false;
                 }
             }
 
@@ -273,10 +241,8 @@ namespace Simple_KLADR
                 {
                     tb_ULICA.Enabled = false;
                     tb_ULICA_SOCR.Enabled = false;
-                    tb_ULICA_SKR.Enabled = false;
                     tb_DOM.Enabled = false;
                     tb_DOM_SOCR.Enabled = false;
-                    tb_DOM_SKR.Enabled = false;
                 }
             }
 
@@ -294,15 +260,13 @@ namespace Simple_KLADR
                 {
                     tb_ULICA.Enabled = false;
                     tb_ULICA_SOCR.Enabled = false;
-                    tb_ULICA_SKR.Enabled = false;
                     tb_DOM.Enabled = false;
                     tb_DOM_SOCR.Enabled = false;
-                    tb_DOM_SKR.Enabled = false;
                 }
             }
 
             lb_count_rows.Text = "Найдено " + (dataGridView1.RowCount - 1).ToString() + " строк(и)";
-            counter = 5;
+            index = 5;
         }
 
         //***************************Dom  
@@ -321,12 +285,11 @@ namespace Simple_KLADR
             {
                 tb_DOM.Enabled = false;
                 tb_DOM_SOCR.Enabled = false;
-                tb_DOM_SKR.Enabled = false;
                 MessageBox.Show("Нет данных");
             }
 
             lb_count_rows.Text = "Найдено " + (dataGridView1.RowCount - 1).ToString() + " строк(и)";
-            counter = 6;
+            index = 6;
         }
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -336,7 +299,7 @@ namespace Simple_KLADR
             { return; }
             var item = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
 
-            if (counter == 1)
+            if (index == 1)
             {
                 clear_func();
 
@@ -348,23 +311,19 @@ namespace Simple_KLADR
                 {
                     tb_RAYON.Enabled = false;
                     tb_RAYON_SOCR.Enabled = false;
-                    tb_RAYON_SKR.Enabled = false;
                     tb_GOROD.Enabled = false;
                     tb_GOROD_SOCR.Enabled = false;
-                    tb_GOROD_SKR.Enabled = false;
                 }
                 else
                 {
                     tb_RAYON.Enabled = true;
                     tb_RAYON_SOCR.Enabled = true;
-                    tb_RAYON_SKR.Enabled = true;
                     tb_GOROD.Enabled = true;
                     tb_GOROD_SOCR.Enabled = true;
-                    tb_GOROD_SKR.Enabled = true;
                 }
             }
 
-            else if (counter == 2)
+            else if (index == 2)
             {
                 rayon = "";
                 gorod = "";
@@ -392,21 +351,18 @@ namespace Simple_KLADR
                 tb_DOM_SOCR.Text = "";
                 tb_DOM_SKR.Text = "";
 
+                //    tb_REGION.Enabled = true;
+                //    tb_REGION_SOCR.Enabled = true;
                 tb_RAYON.Enabled = true;
                 tb_RAYON_SOCR.Enabled = true;
-                tb_RAYON_SKR.Enabled = true;
                 tb_GOROD.Enabled = true;
                 tb_GOROD_SOCR.Enabled = true;
-                tb_GOROD_SKR.Enabled = true;
                 tb_NASPUNKT.Enabled = true;
                 tb_NASPUNKT_SOCR.Enabled = true;
-                tb_NASPUNKT_SKR.Enabled = true;
                 tb_ULICA.Enabled = true;
                 tb_ULICA_SOCR.Enabled = true;
-                tb_ULICA_SKR.Enabled = true;
                 tb_DOM.Enabled = true;
                 tb_DOM_SOCR.Enabled = true;
-                tb_DOM_SKR.Enabled = true;
 
                 tb_RAYON.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
                 tb_RAYON_SOCR.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
@@ -414,15 +370,18 @@ namespace Simple_KLADR
                 rayon = tb_RAYON.Text + " " + tb_RAYON_SOCR.Text;
                 tb_GOROD.Enabled = false;
                 tb_GOROD_SOCR.Enabled = false;
-                tb_GOROD_SKR.Enabled = false;
             }
 
-            else if (counter == 3)
+            else if (index == 3)
             {
                 gorod = "";
                 nas_punkt = "";
                 ulica = "";
                 dom = "";
+
+                //      tb_RAYON.Text = "";
+                //      tb_RAYON_SOCR.Text = "";
+                //     tb_RAYON_SKR.Text = "";
 
                 tb_GOROD.Text = "";
                 tb_GOROD_SOCR.Text = "";
@@ -439,35 +398,45 @@ namespace Simple_KLADR
                 tb_DOM.Text = "";
                 tb_DOM_SOCR.Text = "";
                 tb_DOM_SKR.Text = "";
-           
+
+                //     tb_REGION.Enabled = true;
+                //     tb_REGION_SOCR.Enabled = true;
+                //     tb_RAYON.Enabled = true;
+                //     tb_RAYON_SOCR.Enabled = true;
                 tb_GOROD.Enabled = true;
                 tb_GOROD_SOCR.Enabled = true;
-                tb_GOROD_SKR.Enabled = true;
                 tb_NASPUNKT.Enabled = true;
                 tb_NASPUNKT_SOCR.Enabled = true;
-                tb_NASPUNKT_SKR.Enabled = true;
                 tb_ULICA.Enabled = true;
                 tb_ULICA_SOCR.Enabled = true;
-                tb_ULICA_SKR.Enabled = true;
                 tb_DOM.Enabled = true;
                 tb_DOM_SOCR.Enabled = true;
-                tb_DOM_SKR.Enabled = true;
 
                 tb_GOROD.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
                 tb_GOROD_SOCR.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
                 tb_GOROD_SKR.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
-                gorod = tb_GOROD.Text + " " + tb_GOROD_SOCR.Text;             
+                gorod = tb_GOROD.Text + " " + tb_GOROD_SOCR.Text;
+                //  tb_NASPUNKT.Enabled = false;
+                //  tb_NASPUNKT_SOCR.Enabled = false;
             }
 
-            else if (counter == 4)
+            else if (index == 4)
             {
                 nas_punkt = "";
                 ulica = "";
                 dom = "";
 
-                tb_NASPUNKT.Text = "";
-                tb_NASPUNKT_SOCR.Text = "";
-                tb_NASPUNKT_SKR.Text = "";
+                //    tb_RAYON.Text = "";
+                //   tb_RAYON_SOCR.Text = "";
+                //   tb_RAYON_SKR.Text = "";
+
+                //    tb_GOROD.Text = "";
+                //    tb_GOROD_SOCR.Text = "";
+                //    tb_GOROD_SKR.Text = "";
+
+                //    tb_NASPUNKT.Text = "";
+                //    tb_NASPUNKT_SOCR.Text = "";
+                //   tb_NASPUNKT_SKR.Text = "";
 
                 tb_ULICA.Text = "";
                 tb_ULICA_SOCR.Text = "";
@@ -476,16 +445,19 @@ namespace Simple_KLADR
                 tb_DOM.Text = "";
                 tb_DOM_SOCR.Text = "";
                 tb_DOM_SKR.Text = "";
-                               
+
+                //   tb_REGION.Enabled = true;
+                //   tb_REGION_SOCR.Enabled = true;
+                //   tb_RAYON.Enabled = true;
+                //   tb_RAYON_SOCR.Enabled = true;
+                //   tb_GOROD.Enabled = true;
+                //   tb_GOROD_SOCR.Enabled = true;
                 tb_NASPUNKT.Enabled = true;
                 tb_NASPUNKT_SOCR.Enabled = true;
-                tb_NASPUNKT_SKR.Enabled = true;
                 tb_ULICA.Enabled = true;
                 tb_ULICA_SOCR.Enabled = true;
-                tb_ULICA_SKR.Enabled = true;
                 tb_DOM.Enabled = true;
                 tb_DOM_SOCR.Enabled = true;
-                tb_DOM_SKR.Enabled = true;
 
                 tb_NASPUNKT.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
                 tb_NASPUNKT_SOCR.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
@@ -494,24 +466,45 @@ namespace Simple_KLADR
                 lb_INDEX_R.Text = this.dataGridView1.CurrentRow.Cells[3].Value.ToString();
                 lb_GNI_R.Text = this.dataGridView1.CurrentRow.Cells[4].Value.ToString();
                 lb_OCATD_R.Text = this.dataGridView1.CurrentRow.Cells[6].Value.ToString();
-                index = lb_INDEX_R.Text;
             }
 
-            else if (counter == 5)
+            else if (index == 5)
             {
                 ulica = "";
-                dom = "";       
+                dom = "";
+
+                //     tb_RAYON.Text = "";
+                //     tb_RAYON_SOCR.Text = "";
+                //     tb_RAYON_SKR.Text = "";
+
+                //    tb_GOROD.Text = "";
+                //    tb_GOROD_SOCR.Text = "";
+                //    tb_GOROD_SKR.Text = "";
+
+                //    tb_NASPUNKT.Text = "";
+                //    tb_NASPUNKT_SOCR.Text = "";
+                //    tb_NASPUNKT_SKR.Text = "";
+
+                //    tb_ULICA.Text = "";
+                //    tb_ULICA_SOCR.Text = "";
+                //   tb_ULICA_SKR.Text = "";
 
                 tb_DOM.Text = "";
                 tb_DOM_SOCR.Text = "";
                 tb_DOM_SKR.Text = "";
-                               
+
+                //   tb_REGION.Enabled = true;
+                //   tb_REGION_SOCR.Enabled = true;
+                //   tb_RAYON.Enabled = true;
+                //   tb_RAYON_SOCR.Enabled = true;
+                //   tb_GOROD.Enabled = true;
+                //   tb_GOROD_SOCR.Enabled = true;
+                //   tb_NASPUNKT.Enabled = true;
+                //   tb_NASPUNKT_SOCR.Enabled = true;
                 tb_ULICA.Enabled = true;
                 tb_ULICA_SOCR.Enabled = true;
-                tb_ULICA_SKR.Enabled = true;
                 tb_DOM.Enabled = true;
                 tb_DOM_SOCR.Enabled = true;
-                tb_DOM_SKR.Enabled = true;
 
                 tb_ULICA.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
                 tb_ULICA_SOCR.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
@@ -520,16 +513,44 @@ namespace Simple_KLADR
                 lb_INDEX_R.Text = this.dataGridView1.CurrentRow.Cells[3].Value.ToString();
                 lb_GNI_R.Text = this.dataGridView1.CurrentRow.Cells[4].Value.ToString();
                 lb_OCATD_R.Text = this.dataGridView1.CurrentRow.Cells[6].Value.ToString();
-                index = lb_INDEX_R.Text;
             }
 
-            else if (counter == 6)
+            else if (index == 6)
             {
                 dom = "";
 
+                //    tb_RAYON.Text = "";
+                //    tb_RAYON_SOCR.Text = "";
+                //    tb_RAYON_SKR.Text = "";
+
+                //    tb_GOROD.Text = "";
+                //    tb_GOROD_SOCR.Text = "";
+                //    tb_GOROD_SKR.Text = "";
+
+                //    tb_NASPUNKT.Text = "";
+                //    tb_NASPUNKT_SOCR.Text = "";
+                //    tb_NASPUNKT_SKR.Text = "";
+
+                //   tb_ULICA.Text = "";
+                //     tb_ULICA_SOCR.Text = "";
+                //     tb_ULICA_SKR.Text = "";
+
+                //    tb_DOM.Text = "";
+                //    tb_DOM_SOCR.Text = "";
+                //   tb_DOM_SKR.Text = "";
+
+                //   tb_REGION.Enabled = true;
+                //   tb_REGION_SOCR.Enabled = true;
+                //   tb_RAYON.Enabled = true;
+                //   tb_RAYON_SOCR.Enabled = true;
+                //   tb_GOROD.Enabled = true;
+                //   tb_GOROD_SOCR.Enabled = true;
+                //   tb_NASPUNKT.Enabled = true;
+                //   tb_NASPUNKT_SOCR.Enabled = true;
+                //   tb_ULICA.Enabled = true;
+                //   tb_ULICA_SOCR.Enabled = true;
                 tb_DOM.Enabled = true;
                 tb_DOM_SOCR.Enabled = true;
-                tb_DOM_SKR.Enabled = true;
 
                 tb_DOM.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
                 tb_DOM_SOCR.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
@@ -538,10 +559,9 @@ namespace Simple_KLADR
                 lb_INDEX_R.Text = this.dataGridView1.CurrentRow.Cells[4].Value.ToString();
                 lb_GNI_R.Text = this.dataGridView1.CurrentRow.Cells[5].Value.ToString();
                 lb_OCATD_R.Text = this.dataGridView1.CurrentRow.Cells[6].Value.ToString();
-                index = lb_INDEX_R.Text;
             }
 
-            richTextBox1.Text = index + ", " + region + ", " + rayon + ", " + gorod + ", " + nas_punkt + ", " + ulica + ", " + dom;
+            richTextBox1.Text = region + ", " + rayon + ", " + gorod + ", " + nas_punkt + ", " + ulica + ", " + dom;
         }
 
         private void connection_func()
@@ -553,7 +573,6 @@ namespace Simple_KLADR
             ConnectionString.Close();
             dataGridView1.DataSource = ds.Tables[0];
         }
-
         private void clear_func()
         {
             region = "";
@@ -597,50 +616,31 @@ namespace Simple_KLADR
 
             tb_REGION.Enabled = true;
             tb_REGION_SOCR.Enabled = true;
-            tb_REGION_SKR.Enabled = true;
             tb_RAYON.Enabled = true;
             tb_RAYON_SOCR.Enabled = true;
-            tb_RAYON_SKR.Enabled = true;
             tb_GOROD.Enabled = true;
             tb_GOROD_SOCR.Enabled = true;
-            tb_GOROD_SKR.Enabled = true;
             tb_NASPUNKT.Enabled = true;
             tb_NASPUNKT_SOCR.Enabled = true;
-            tb_NASPUNKT_SKR.Enabled = true;
             tb_ULICA.Enabled = true;
             tb_ULICA_SOCR.Enabled = true;
-            tb_ULICA_SKR.Enabled = true;
             tb_DOM.Enabled = true;
             tb_DOM_SOCR.Enabled = true;
-            tb_DOM_SKR.Enabled = true;
-        }           
+        }
+
+    
 
         private void tb_db_Location_Click(object sender, EventArgs e)
         {
             if (fbd.ShowDialog() == DialogResult.OK)
             {
-              tb_db_Location.Text = "";                            
-              tb_db_Location.AppendText(fbd.SelectedPath);
-            //  string db_connectiom_path = tb_db_Location.Text;
+
+                tb_db_Location.Text = "";
+                // txt_db_Name.Visible = false;
+                // txt_db_Login.Visible = false;
+                //  txt_db_Password.Visible = false;
+                tb_db_Location.AppendText(fbd.SelectedPath);
             }
         }
-
-        private void выходToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-        private void лицензияToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-              MessageBox.Show("Программа предназанчена для свободного распостранения. При желании можно отблагодарить автора  -  WebMoney (cчет R623561216899, Z268001125501 или E164732259639) или Яндекс-деньги (счет 41001627136483).\n" +       
-                             "C вопросами по работе программы, ее дорабоке или разработке новых программ можно писать на a_t_i@mail.ru", "Лицензионное соглашение");
-        }
-
-        private void оПрограммуToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-             MessageBox.Show("Программа Simple KLADR предназначена для корректного заполнения адресов физических лиц при формировании налоговой отчетности или получения достоверного почтового адреса." +
-                            "\n Программа может работать на любом компьютере с операционной средой Windows." +
-                 "\n Для работы программы достаточно скачать архивный файл базы данных КЛАДР (BASE.arj) c сайта ГНИВЦ http://www.gnivc.ru/inf_provision/classifiers_reference/kladr/ и разархивировать его содержание в любую папку на вашем компьютерном диске.", "О программе");
-        }   
     }
 }
